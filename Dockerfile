@@ -1,44 +1,31 @@
-#FROM centos
-FROM ubuntu
-MAINTAINER Adam Christie <adam.christie@digirati.co.uk>
+FROM ubuntu:14.04
 
-RUN apt-get update
-#RUN yum install -y epel-release
-#RUN yum install -y scl-utils scl-utils-build
-#RUN yum install -y memcached libjpeg-devel libtiff-devel centos-release-scl git cmake zlib-devel libpng-devel lcms2-devel wget
-RUN apt-get install -y memcached libjpeg-dev libtiff-dev libpng-dev wget git
-#RUN yum install -y devtoolset-4
-#RUN scl enable devtoolset-4 bash
-COPY ./openjpeg.tar.gz .
-RUN tar -xzvf openjpeg.tar.gz
-#COPY ./compile-openjpeg.sh .
-#RUN ./compile-openjpeg.sh
+RUN apt-get update && apt-get install -y \
+    lighttpd \
+    libfcgi \
+    libgomp1 \
+    groff \
+    gettext-base \
+    && rm -rf /var/lib/apt/lists/*
 
-# library path fixes
-RUN mkdir -p /openjpeg/src/lib/openjp2
-RUN cp /usr/include/openjpeg-2.2/*.h /openjpeg/src/lib/openjp2/
-RUN mkdir /openjpeg/bin
-RUN cp /usr/lib/libopenjp2.so /openjpeg/bin/
+# dirty way to do it...
+RUN ln -s /usr/lib/x86_64-linux-gnu/libtiff.so.5 /usr/lib/x86_64-linux-gnu/libtiff.so.4
 
-# now iipsrv
-#RUN yum install -y gc gcc++ *gcc-c++*
-RUN apt-get install -y libfcgi-dev gcc
-COPY ./iipsrv.tar.gz .
-RUN tar -xzvf iipsrv.tar.gz
-#COPY ./compile-iipsrv.sh .
-#RUN ./compile-iipsrv.sh
+RUN ln -s /etc/lighttpd/conf-available/10-fastcgi.conf /etc/lighttpd/conf-enabled/.
 
-RUN mkdir -p /var/www/localhost/fcgi-bin
-RUN cp /iipsrv/iipsrv.fcgi /var/www/localhost/fcgi-bin/
+COPY lighttpd/lighttpd-1.conf.template /etc/lighttpd/lighttpd-1.conf.template
 
-# now lighttpd
-#RUN yum install -y lighttpd-fastcgi
-RUN apt-get install -y lighttpd
-COPY lighttpd/lighttpd-1.conf /etc/lighttpd/lighttpd-1.conf
+RUN mkdir -p /var/www/localhost && \
+    ln -sf /dev/stdout /tmp/iipsrv-1.log
 
-#RUN useradd -M -U www-data
-#RUN mkdir -p /var/cache/lighttpd/compress
+COPY ./openjpeg.tar.gz /
+RUN cd / && tar -xzvf openjpeg.tar.gz
 
-COPY ./operations.sh .
+COPY ./fcgi-bin.tar.gz /var/www/localhost/
+RUN cd /var/www/localhost && tar -xzvf fcgi-bin.tar.gz
+
+COPY ./operations.sh /
+
+ENV IMAGE_CACHE_SIZE 128
 
 EXPOSE 8080
