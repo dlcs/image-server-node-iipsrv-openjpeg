@@ -29,6 +29,7 @@ RUN apt-get update && apt-get install -y \
     libgomp1 \
     groff \
     gettext-base \
+    memcached \
     && rm -rf /var/lib/apt/lists/*
 
 LABEL maintainer="Donald Gray <donald.gray@digirati.com>"

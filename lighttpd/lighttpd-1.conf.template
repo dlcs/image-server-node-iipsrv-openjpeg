@@ -3,7 +3,6 @@ server.modules = (
      "mod_alias",
      "mod_compress",
      "mod_redirect"
-     # "mod_fastcgi"
 )
 
 server.document-root        = "/var/www"
