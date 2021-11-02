@@ -7,7 +7,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     libfcgi0ldbl libjpeg8 zlib1g-dev libstdc++6 libtool cmake wget  \
     libjpeg-dev libtiff-dev libpng-dev liblcms2-2 libmemcached-dev \
-    lighttpd memcached git autoconf pkg-config gettext-base
+    git autoconf pkg-config gettext-base
 
 # install build-essentials
 RUN apt-get install build-essential -y
@@ -16,7 +16,7 @@ RUN apt-get install build-essential -y
 RUN mkdir -p /opt && cd /opt && git clone https://github.com/uclouvain/openjpeg.git && cd openjpeg && git checkout v2.4.0
 
 # build openjpeg
-RUN cd /opt/openjpeg && cmake -DCMAKE_BUILD_TYPE=Release _DCMAKE_INSTALL_PREFIX=/usr . && make && make install && ldconfig
+RUN cd /opt/openjpeg && cmake -DCMAKE_BUILD_TYPE=Release . && make && make install && ldconfig
 
 # copy openjpeg headers
 RUN cp /usr/local/include/openjpeg-2.4/*.h /opt/openjpeg/src/lib/openjp2/
@@ -29,7 +29,6 @@ RUN apt-get update && apt-get install -y \
     libgomp1 \
     groff \
     gettext-base \
-    memcached \
     && rm -rf /var/lib/apt/lists/*
 
 LABEL maintainer="Donald Gray <donald.gray@digirati.com>"
