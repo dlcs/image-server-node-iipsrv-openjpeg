@@ -11,5 +11,5 @@ This has been pushed to ghcr as `ghcr.io/dlcs/iipsrv-openjpeg:2.4.0` and `ghcr.i
 ```sh
 docker build -t iipsrv-openjpeg:local .
 
-docker run -d -p=8080:8080 -v /efs:/efs iipsrv-openjpeg:local ./operations.sh
+docker run -d -p 8080:8080 -v /efs:/efs --name iip iipsrv-openjpeg:local ./operations.sh
 ```

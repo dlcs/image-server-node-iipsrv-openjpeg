@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y \
 
 LABEL maintainer="Donald Gray <donald.gray@digirati.com>"
 LABEL org.opencontainers.image.source=https://github.com/dlcs/image-server-node-iipsrv-openjpeg
+LABEL org.opencontainers.image.description="IIP Image Server 1.1 with OpenJpeg 2.4"
 
 RUN ldconfig
 
