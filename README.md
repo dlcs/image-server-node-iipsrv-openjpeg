@@ -4,7 +4,7 @@ A multi stage Dockerfile that builds openjpeg 2.4.0 and copies output to a new s
 
 The new stage runs precompiled IIP Image with openjpeg via lighttpd.
 
-This has been pushed to ghcr as `ghcr.io/dlcs/iipsrv-openjpeg:2.4.0` and `ghcr.io/dlcs/iipsrv-openjpeg:2.4.0`
+This has been pushed to ghcr as `ghcr.io/dlcs/iipsrv-openjpeg:2.4.0` and `ghcr.io/dlcs/iipsrv-openjpeg:<current-sha1>`
 
 ## Running
 
